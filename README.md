@@ -57,4 +57,4 @@ xuehao|username|name|password
 如果你喜欢欢迎`start`也欢迎`issue`
 ##### Time :Version 1.0 2020/1/4 提交了requests版本  如有服务需要请联系Q：936332553 良心价.感谢
 
-##### 感谢[Eunsolfs](https://github.com/Eunsolfs "Eunsolfs的GitHub")
+##### 特别感谢[Eunsolfs](https://github.com/Eunsolfs "Eunsolfs的GitHub")
