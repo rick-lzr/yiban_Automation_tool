@@ -1,8 +1,5 @@
 from __future__ import unicode_literals, print_function  # python2
-
 import urllib
-
-import datetime
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_v1_5
 from bs4 import BeautifulSoup
@@ -18,7 +15,7 @@ import re
 
 # 当前的session会话对象
 
-# 登录操作
+# 全局参数
 cookies = "preview_hidden=0; FEED_NEW_VERSION_7130177=1; " \
           "UM_distinctid=16c0a179d9a202-00ff9970083d5f-c343162-189420-16c0a179d9ba7d; FEED_NEW_VERSION_11887100=1; " \
           "__SDID=32a7d854ba36e6af; analytics=b1f4e5c43a3d945d; " \
@@ -27,17 +24,31 @@ cookies = "preview_hidden=0; FEED_NEW_VERSION_7130177=1; " \
           "YB_SSID=d86cca437c8f1feacff03c4823ba6c1f; CNZZDATA1253488264=1474242759-1542784100-null%7C1570091073; " \
           "_cnzz_CV1253488264=%E5%AD%A6%E6%A0%A1%E9%A1%B5%E9%9D%A2%7C%3A%2FIndex%2FLogin%2Findex%7C1570095214636%26" \
           "%E5%AD%A6%E6%A0%A1%E5%90%8D%E7%A7%B0%7C%E5%85%B6%E4%BB%96%7C1570095214636 "
-user_website = ""
-user_id = ""
-group_id = ""
-puid = ""
-channel_id = ""
-actor_id = ""
-nick = ""
+TransMoney = "100"  #
+TransAccount = ""  # 欲转入网薪的账户的用户ID,欲开启此功能需先找到自己的Id
+Puid = ""
+Group_id = ""
+Channel_id = ""
+Actor_id = ""
+Nick = ""
+User_website = ""
+
+'''
+:param username:用户名
+:param password:密码
+:param puid:院系id
+:param group_id:发投票要发到指定的群的group_id
+:param is_trans:是否转网新
+'''
 
 
-def login(username, password, banji):
+def login(username, password, puid, group_id, is_trans):
     global session
+    start_json = {
+        "puid": puid,
+        "group_id": group_id,
+        "is_trans": is_trans
+    }
     session = requests.session()
     header = get_html_header("https://www.yiban.cn/login")
     # print(header)
@@ -52,27 +63,26 @@ def login(username, password, banji):
         code = ""
         # 获取到验证码
         encrypt_password = get_crypt_password(data_keys, password)
-        # print("login_json")
-        login_json = json.loads(login_request(
-            username, encrypt_password, code, data_keys_time))
+        login_json = json.loads(login_request(username, encrypt_password, code, data_keys_time))
+        # print(login_json)
         # 获取到返回的json数据
         if login_json['code'] == 200:
-            start(login_json, banji)
+            start(start_json)
         else:
             if login_json['code'] == '711':
                 code = wirte_code("yanzhengma.jpg")
                 print("使用了验证码，验证码是:", code)
                 if code == 1:
-                    login(username=username, password=password, banji=banji)
+                    login(username=username, password=password, puid=puid, group_id=group_id, is_trans=is_trans)
                     return
                 else:
                     login_json = json.loads(login_request(
                         username, encrypt_password, code, data_keys_time))
                 if login_json['code'] == '201':
-                    login(username=username, password=password, banji=banji)
+                    login(username=username, password=password, puid=puid, group_id=group_id, is_trans=is_trans)
                     return
                 elif login_json['code'] == 200:
-                    start(login_json, banji)
+                    start(start_json)
                     return
                 else:
                     print("错误码:", login_json['code'], " 原因:", login_json['message'])
@@ -81,34 +91,30 @@ def login(username, password, banji):
                 print("错误码:", login_json['code'], " 原因:", login_json['message'])
                 session.close()
                 # print(r.text)
-    except TypeError:
+    except TypeError as e:
         f = open('1.html', 'wb')
         text = r.content
         f.write(text)
         f.close()
         print(username, "出错了")
-        login(username, password, banji)
+        # print(e.with_traceback())
+        login(username, password, puid, group_id, is_trans)
         session.close()
         pass
 
 
 def get_html_header(url):
     res = requests.get(url, timeout=12)
-    # print(res) 861500
     if res.status_code == 200:
         header = {"cookie": str(res.cookies.get_dict())}
-        # print(res.cookies.get_dict(), "this is cookie dict")
         return header
     soup_script = BeautifulSoup(res.text, "html.parser")
     script = soup_script.find("script")
     scriptStr = script.text
     fun_str = re.search(r'function (..)', scriptStr).group(1)
     param = scriptStr[re.search(fun_str + "\(", scriptStr).end():re.search("....200", scriptStr).start()]
-    # print(fun_str, param)
     scriptStr = re.sub(r'window.onload=setTimeout................', "", scriptStr)
     scriptStr = re.sub(r'eval."qo=eval;qo.po.;".;', "return po;", scriptStr)
-    # print(url)
-    # print(scriptStr)
     ctx = execjs.compile(scriptStr)
     fun_res = ctx.call(fun_str, param)
     cookies = fun_res.replace("document.cookie='", "")
@@ -162,8 +168,6 @@ def login_request(username, encrypt_password, code, data_keys_time):
 
 
 # 验证码保存
-
-
 def wirte_code(saveUrl):
     r = session.get("https://www.yiban.cn/captcha/index?" +
                     (str(int(time.time()))))
@@ -176,48 +180,39 @@ def wirte_code(saveUrl):
     return code
 
 
-def start(login_json, banji):
+def start(start_json):
+    Group_id = start_json['group_id']
+    Puid = start_json['puid']
     print("模拟登陆成功")
-    print(login_json)
-    user_website = login_json['data']['url']
-    user_id = get_user_id()
-    print("获取到的用户id为:" + user_id)
-
-    global group_id
-    global puid
-    global channel_id
-    global actor_id
-    global nick
-
-    info = getInfo(group_id=group_id, puid=puid)
-
-    channel_id = info['channel_id']
-    actor_id = info['actor_id']
-    nick = info['nick']
-    group_id = info['group_id']  # 这里是确定用户是在哪一个微社区发动态的如果需要确定则请自己填写
-    puid = info['puid']  # 所属组织（院系）
-
-    print(info)
-
+    # print(login_json)
+    info = getInfo(group_id=Group_id, puid=Puid)
+    # Channel_id = info['channel_id']
+    Actor_id = info['actor_id']
+    Nick = info['nick']
+    # Group_id = info['group_id']  # 这里是确定用户是在哪一个微社区发动态
+    # Puid = info['puid']  # 所属组织（院系）
+    print("获取到的用户id为:" + Actor_id)
+    # print(info)
     qiandao()
-    # 循环四次.
+    # 循环
     for i in range(1):
-        # addFeed()
+        # 发布动态
+        addFeed()
+        # 添加话题
         addTopic()
+        # 网站\客户端查看(个人/公共/机构账号)主页
         addPersonWebsite()
+        # 博文添加
         # addblog()
-        # addYiMiaoMiao()
+        # 添加易喵喵
+        addYiMiaoMiao()
+        # 添加投票
         add_vote()
-        print("执行一轮完成.等待下一轮执行")
+        # 网薪转账 函数内部自带判断是否转移
+        # givePresent(info)
+        print("当前用户[" + Nick + "] 第" + str(i + 1) + "轮执行")
         time.sleep(2)
     session.close()
-
-
-def get_user_id():
-    r = session.get("http://www.yiban.cn/my/feed", timeout=12)
-    soup = BeautifulSoup(r.text, "html.parser")
-    span = soup.find_all("span", class_="user-account")[0]
-    return str(span)[str(span).index("user_id/") + 8:str(span).index("user_id/") + 16]
 
 
 # 获取通过加密的密码
@@ -233,29 +228,31 @@ def encrypt(msg, cipher):
     return base64.b64encode(ciphertext).decode('ascii')
 
 
+# 签到
 def qiandao():
+    info = YiYan()
     form_data = {
         "optionid[]": 12182,
-        "input": ""
+        "input": info
     }
     r = session.post("http://www.yiban.cn/ajax/checkin/answer", data=form_data)
     result_json = json.loads(r.text)
     print(result_json["message"])
 
 
-# 发布动态(完成)
+# 发布动态
 def addFeed():
-    # randomstr = str(random.randint(100, 99999))
-    randomstr = "今天是{today}又在易班上签到了，好开心啊....哈哈哈".format(today=datetime.date.today())
+    info = YiYan()
     form_data = {
-        "content": randomstr,
+        "content": info,
         "privacy": "0",
         "dom": ".js-submit"
     }
     # 自动发表动态
     r = session.post("http://www.yiban.cn/feed/add", data=form_data)
-    print(r.text)
+    # print(r.text)
     post_json = json.loads(r.text)
+
     if post_json['code'] == 200:
         try:
             feedId = str(post_json['data']['feedId'])
@@ -265,10 +262,10 @@ def addFeed():
             # 自动同情
             session.post("http://www.yiban.cn/feed/down", data={"id": feedId})
             # 自动发表评论
-            comment_random = str(random.randint(100, 99999))
+            yiyan = YiYan()
             session.post("http://www.yiban.cn/feed/createComment",
-                         data={"id": feedId, "content": comment_random})
-            print("动态相关的网薪完成.")
+                         data={"id": feedId, "content": yiyan})
+            print("动态相关的网薪获取完成.")
         except:
             addFeed()
     else:
@@ -276,20 +273,18 @@ def addFeed():
 
 
 # 博文添加
-
-
 def addblog():
-    r = session.get("http://www.yiban.cn" + user_website)
-    randomstr = str(random.randint(100, 99999))
-    r = session.post("http://www.yiban.cn/blog/blog/addblog", data={"title": randomstr, "content": randomstr,
+    r = session.get("http://www.yiban.cn" + User_website)
+    info = YiYan()
+    r = session.post("http://www.yiban.cn/blog/blog/addblog", data={"title": info, "content": info,
                                                                     "ranges": "1", "type": "1",
                                                                     "token": "64d41ba3222a4c4614fc33f594a6df4d",
                                                                     "ymm": "1", "dom": ".js-submit"})
     post_result = json.loads(r.text)
     if post_result['code'] == 200:
-        global user_id
+        global Actor_id
         r = session.get(
-            "http://www.yiban.cn/blog/blog/getBlogList?page=1&size=10&uid=" + user_id)
+            "http://www.yiban.cn/blog/blog/getBlogList?page=1&size=10&uid=" + Actor_id)
         m_json = json.loads(r.text)
         print(m_json)
         if m_json['code'] == 200:
@@ -302,12 +297,12 @@ def addblog():
                 Mount_id = m_json['Mount_id']
                 # 博文点赞
                 session.get("http://www.yiban.cn/blog/blog/addlike/uid/" +
-                            user_id + "/blogid/" + blog_id)
+                            Actor_id + "/blogid/" + blog_id)
                 # 评论博文
                 # blogid: 12300216 oid: 18884862 mid: 48893712 reply_user_id: 0 reply_comment_id: 0 content: 123123123
                 session.post("http://www.yiban.cn/blog/blog/addcomment/", data={
-                    "blogid": blog_id, "oid": user_id, "mid": Mount_id, "reply_user_id": "0", "reply_comment_id": "0",
-                    "content": randomstr})
+                    "blogid": blog_id, "oid": Actor_id, "mid": Mount_id, "reply_user_id": "0", "reply_comment_id": "0",
+                    "content": info})
                 print("博文发表成功")
             except Exception:
                 print("博文发表异常")
@@ -321,20 +316,18 @@ def addblog():
 
 
 # 添加易喵喵
-
-
 def addYiMiaoMiao():
     randomstr = str(random.randint(100, 99999))
     data_form = {"title": randomstr,
                  "content": randomstr, "kind": '8', "agree": 'true'}
     r = session.post("http://ymm.yiban.cn/article/index/add", json=data_form)
-    print(r.text)
+    # print(r.text)
 
 
 # 网站\客户端查看(个人/公共/机构账号)主页
 def addPersonWebsite():
     # 查看个人
-    session.get("http://www.yiban.cn/user/index/index/user_id/" + user_id, timeout=12)
+    session.get("http://www.yiban.cn/user/index/index/user_id/" + Actor_id, timeout=12)
     # 查看机构
     session.get("http://www.yiban.cn/school/index/id/5000090", timeout=12)
     # 查看公共
@@ -343,66 +336,31 @@ def addPersonWebsite():
 
 
 # 添加话题
-
-
 def addTopic():
-    # randomstr = str(random.randint(100, 99999))
-    randomstr = "坚持每天话题签到"
+    info = YiYan()
     payload = {
-        'puid': puid,
-        'pubArea': group_id,
-        'title': randomstr,
-        'content': randomstr,
+        'puid': Puid,
+        'pubArea': Group_id,
+        'title': info,
+        'content': info,
         'isNotice': 'false',
         'dom': '.js-submit'
     }
-
     Add_Topic = session.post(
         'https://www.yiban.cn/forum/article/addAjax', data=payload, timeout=10)
     return Add_Topic.json()['message']
 
 
-'''
-获取群组信息
-返回 JSON 字典
-'''
-
-
-def getInfo(group_id, puid):
-    payload = {
-        'puid': puid,
-        'group_id': group_id
-    }
-
-    Get_Channel_Info = session.post(
-        'https://www.yiban.cn/forum/api/getListAjax', data=payload, timeout=10)
-    channel_id = Get_Channel_Info.json()['data']['channel_id']
-
-    Get_User_Info = session.post(
-        'https://www.yiban.cn/ajax/my/getLogin', timeout=10)
-    actor_id = Get_User_Info.json()['data']['user']['id']
-    nick = Get_User_Info.json()['data']['user']['nick']
-
-    info = {
-        'group_id': group_id,
-        'puid': puid,
-        'channel_id': channel_id,
-        'actor_id': actor_id,
-        'nick': nick
-    }
-
-    return info
-
-
+# 添加投票
 def add_vote():
-    # randomstr = str(random.randint(100, 99999))
-    randomstr = "是否应该坚持每天发投票？"
+    # info = str(random.randint(100, 99999))
+    info = YiYan()
     payload = {
-        'puid': puid,
-        'group_id': group_id,
-        'scope_ids': group_id,
-        'title': randomstr,
-        'subjectTxt': randomstr,
+        'puid': Puid,
+        'group_id': Group_id,
+        'scope_ids': Group_id,
+        'title': info,
+        'subjectTxt': info,
         'subjectPic': None,
         'options_num': 2,
         'scopeMin': 1,
@@ -416,8 +374,8 @@ def add_vote():
         'istop': 1,
         'sysnotice': 2,
         'isshare': 1,
-        'subjectTxt_1': randomstr,
-        'subjectTxt_2': randomstr,
+        'subjectTxt_1': info,
+        'subjectTxt_2': info,
         'rsa': 1,
         'dom': '.js-submit'
     }
@@ -427,14 +385,73 @@ def add_vote():
     print("添加投票已经完成")
 
 
-"""登陆时调用的函数。可以从这里使用login开始调试"""
-# login('您自己的账号', '密码', "班级") #  最后一个参数是年级和班级，如果没有需要确定的话就可以不需要管他。
-# 如果有要求发动态到指定的微社区，则需要确定年级和班级，然后再根据年级和班级确定group_id和puid在start(方法中)
-# 班级参数需要自己映射。如果不自己确定我源码中写好的是在我的群页面的第一个群为用户发微社区的群
+# 网薪转账
+def givePresent(info):
+    global TransMoney
+    global TransID
+    user_money = info["user_money"]
+    print("当前网薪：" + user_money)
+    if int(TransMoney) == 1:
+        if int(user_money) > 100:
+            money = user_money[:len(user_money) - 2] + "00"
+            # money = "100"
+            from_data = {
+                "to_user_id": TransAccount,
+                "amount": money
+            }
+            session.post("http://www.yiban.cn/ajax/user/givePresent", data=from_data)
+            # givePresent_res = session.post("http://www.yiban.cn/ajax/user/givePresent", data=from_data)
+            # print(givePresent_res.content)
+            print("转帐 [" + money + "]")
+    pass
 
-# except Exception:
-#     print("程序异常,登录失败.")
-# addblog()
-# str = """{"code":200,"message":"\u64cd\u4f5c\u6210\u529f","data":{"url":"\/user\/index\/index\/user_id\/18884862"}}"""
-# m = json.loads(str)x
-# print(m['code'])72c737918b586744d88347de2a58ee75
+
+# 一言
+def YiYan():
+    url = 'https://api.ooopn.com/yan/api.php?type=json'
+    data = urllib.request.urlopen(url)
+    jsdate = json.loads(data.read())
+    yiyan = jsdate["hitokoto"]
+    '''info = {id,hitokoto,cat,catname,author,source,date'''
+    return yiyan
+
+
+'''
+获取群组信息
+返回 JSON 字典
+'''
+
+
+def getInfo(group_id, puid):
+    payload = {
+        'puid': puid,
+        'group_id': group_id
+    }
+    Get_Channel_Info = session.post(
+        'https://www.yiban.cn/forum/api/getListAjax', data=payload, timeout=10)
+    channel_id = Get_Channel_Info.json()['data']['channel_id']
+    Get_User_Info = session.post(
+        'https://www.yiban.cn/ajax/my/getLogin', timeout=10)
+    actor_id = Get_User_Info.json()['data']['user']['id']
+    nick = Get_User_Info.json()['data']['user']['nick']
+    # 取网薪值
+    html_res = session.post("http://www.yiban.cn/user/index/index/user_id/" + actor_id)
+    soup = BeautifulSoup(html_res.content, 'html.parser')
+    user_money_span = soup.find("span", id="user-money")
+    str_begin = str(user_money_span).find(">")
+    str_end = str(user_money_span).find("</")
+    user_money = str(user_money_span)[str_begin + 1:str_end]
+    # print( user_money_span)
+    info = {
+        'group_id': group_id,
+        'puid': puid,
+        'channel_id': channel_id,
+        'actor_id': actor_id,
+        'nick': nick,
+        'user_money': user_money
+    }
+    return info
+
+
+"""登陆时调用的函数。可以从这里使用login开始调试"""
+# login("账号", "密码", 'puid', 'group_id', '2')

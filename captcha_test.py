@@ -94,7 +94,7 @@ def automation(file_path):
     image = read_image(file_path)
     image_transfer(image)[0].save("transfered_image.jpg")
 
-automation("yanzhengma.jpg")
+# automation("yanzhengma.jpg")
 # print(read_captcha("yanzhengma"))
 # image_arry = read_captcha("jpg")
 #
