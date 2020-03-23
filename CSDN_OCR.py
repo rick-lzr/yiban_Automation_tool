@@ -114,6 +114,7 @@ def Recognise(img_path):
     #     print(k, v)
     return recognise
 
+
 '''
 这是我在网上找到的调用百度api的例子，并使用了。作者是Loong Xu。CSDN但是原文懒得找，想要学习的童鞋，应该可以在CSDN上面根据名字找到他的。
 '''

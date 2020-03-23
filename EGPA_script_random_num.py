@@ -436,8 +436,12 @@ def givePresent(info):
 
 # 一言
 def YiYan():
-    url = 'https://api.ooopn.com/yan/api.php?type=json'
-    data = urllib.request.urlopen(url)
+    url = 'https://api.ooopn.com/yan/api.php'
+    try:
+        data = urllib.request.urlopen(url)
+    except urllib.error.HTTPError as e:
+        yiyan = "学院加油，每日签到"
+        return yiyan
     jsdate = json.loads(data.read())
     yiyan = jsdate["hitokoto"]
     '''info = {id,hitokoto,cat,catname,author,source,date'''
@@ -482,4 +486,4 @@ def getInfo(group_id, puid):
 
 
 """登陆时调用的函数。可以从这里使用login开始调试"""
-login("账号", "密码", 'puid', 'groupid', 'istrans')
+# login("账号", "密码", 'puid', 'groupid', 'istrans')
