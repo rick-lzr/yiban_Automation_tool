@@ -60,4 +60,7 @@ X某某|177******|xxxxx|123456|123456|2
 ##### Time :Version 1.0 2020/1/4 提交了requests版本  如有服务需要请联系Q：936332553 良心价.感谢
 [支付宝](zfb.png)
 QAQ不要白嫖我了
+
+> release有exe版本，可直接按照说明使用下载请点击上部release。下载速度太慢可移步到[gitee]("https://gitee.com/lzr9/yiban_Automation_tool/releases/V0.1.1")
+
 ##### 特别感谢[Eunsolfs](https://github.com/Eunsolfs "Eunsolfs的GitHub")
