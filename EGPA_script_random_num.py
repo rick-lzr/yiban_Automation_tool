@@ -181,12 +181,16 @@ def wirte_code(saveUrl):
 
 
 def start(start_json):
+    global Group_id
+    global Channel_id
+    global Puid
+    global Actor_id
     Group_id = start_json['group_id']
     Puid = start_json['puid']
     print("模拟登陆成功")
     # print(login_json)
     info = getInfo(group_id=Group_id, puid=Puid)
-    # Channel_id = info['channel_id']
+    Channel_id = info['channel_id']
     Actor_id = info['actor_id']
     Nick = info['nick']
     # Group_id = info['group_id']  # 这里是确定用户是在哪一个微社区发动态
@@ -346,8 +350,32 @@ def addTopic():
         'isNotice': 'false',
         'dom': '.js-submit'
     }
+    # print(Puid, "\t GroupId", Group_id)
     Add_Topic = session.post(
         'https://www.yiban.cn/forum/article/addAjax', data=payload, timeout=10)
+    # print(Add_Topic.json())
+    link = Add_Topic.json()["data"]["link"]
+    article_id = link[link.find("article_id/") + 11:link.find("/channel_id")]
+    # print(article_id)
+    upArticleFromData = {
+        "article_id": article_id,
+        "channel_id": Channel_id,
+        "puid": Puid
+    }
+    upArticle = session.post("https://www.yiban.cn/forum/article/upArticleAjax", data=upArticleFromData, timeout=10)
+    info = YiYan()
+    addAjaxFromData = {
+        "channel_id": Channel_id,
+        "puid": Puid,
+        "article_id": article_id,
+        "content": info,
+        "reply_id": 0,
+        "syncFeed": 1,
+        "isAnonymous": 0
+    }
+    addAjax = session.post("https://www.yiban.cn/forum/reply/addAjax", data=addAjaxFromData, timeout=10)
+    print("添加话题", Add_Topic.json()['message'], "\t点赞话题:", upArticle.json()["message"], "\t评论话题:",
+          addAjax.json()["message"])
     return Add_Topic.json()['message']
 
 
@@ -454,4 +482,4 @@ def getInfo(group_id, puid):
 
 
 """登陆时调用的函数。可以从这里使用login开始调试"""
-# login("账号", "密码", 'puid', 'group_id', '2')
+login("15008160540", "1998528rf", '7130177', '438148', '2')
