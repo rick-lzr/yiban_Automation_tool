@@ -482,4 +482,4 @@ def getInfo(group_id, puid):
 
 
 """登陆时调用的函数。可以从这里使用login开始调试"""
-login("账号", "密码", 'puid', 'groupid', 'istrans')
+# login("账号", "密码", 'puid', 'groupid', 'istrans')
