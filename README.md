@@ -27,6 +27,7 @@
 
 #### 运行
 > ##### 单例测试运行
+> 注：需要安装js环境（如node.js）
 > EGPA_script_random_num.py -p 431有详细注释：
 >
 >"""登陆时调用的函数。可以从这里使用login开始调试"""
@@ -46,15 +47,17 @@
 >
 >这里需要一个user.xslx 表头是，如下含义
 
-xuehao|username|name|password
----|:--:|:--:|---:
-学号|用户名字|易班账号|密码
-2017xxxxx|X某某|177******|123456
+username|name|password|puid|group_id|trans
+---|:--:|:--:|:--:|:--:|---:
+可以写账号人的姓名仅作显示用，未参加核心运行任务|账号|密码|院系编号|群组号|是否转网薪（1为可以，但要在代码里面开启，并填写自己的信息一般不做使用）
+X某某|177******|xxxxx|123456|123456|2
 
-
-第一次写GitHub项目如有不详细的还请原谅。/xk 
+[puid和group_id获取的地方](puid_groupid.png)
+如图即可
 
 如果你喜欢欢迎`start`也欢迎`issue`
+### 有疑问请issue。（很重要）
 ##### Time :Version 1.0 2020/1/4 提交了requests版本  如有服务需要请联系Q：936332553 良心价.感谢
-
+[支付宝](zfb.png)
+QAQ不要白嫖我了
 ##### 特别感谢[Eunsolfs](https://github.com/Eunsolfs "Eunsolfs的GitHub")
