@@ -466,7 +466,7 @@ def getInfo(group_id, puid):
         'https://www.yiban.cn/ajax/my/getLogin', timeout=10)
     actor_id = Get_User_Info.json()['data']['user']['id']
     nick = Get_User_Info.json()['data']['user']['nick']
-    # 取网薪值
+    # 获取网薪值
     html_res = session.post("http://www.yiban.cn/user/index/index/user_id/" + actor_id)
     soup = BeautifulSoup(html_res.content, 'html.parser')
     user_money_span = soup.find("span", id="user-money")
