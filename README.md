@@ -53,7 +53,7 @@ username|name|password|puid|group_id|trans
 X某某|177******|xxxxx|123456|123456|2
 
 [puid和group_id获取的地方](puid_groupid.png)
-如图即可
+如图即可在自己的微社区里面就可以看到这个链接
 
 如果你喜欢欢迎`start`也欢迎`issue`
 ### 有疑问请issue。（很重要）
