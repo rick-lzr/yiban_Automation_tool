@@ -436,16 +436,17 @@ def givePresent(info):
 
 # 一言
 def YiYan():
-    url = 'https://api.ooopn.com/yan/api.php'
+    url = "https://v1.hitokoto.cn/"
     try:
         data = urllib.request.urlopen(url)
+        jsdate = json.loads(data.read())
+        yiyan = jsdate["hitokoto"]
+        '''info = {id,hitokoto,cat,catname,author,source,date '''
+        return yiyan
     except urllib.error.HTTPError as e:
+        print("yiban_Automation_tool:如果我报错了，请在GitHub上联系原作者：", e)
         yiyan = "学院加油，每日签到"
         return yiyan
-    jsdate = json.loads(data.read())
-    yiyan = jsdate["hitokoto"]
-    '''info = {id,hitokoto,cat,catname,author,source,date'''
-    return yiyan
 
 
 '''
