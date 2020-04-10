@@ -64,4 +64,4 @@ X某某|177******|xxxxx|123456|123456|2
 https://gitee.com/lzr9/yiban_Automation_tool/releases/V0.1.1
 
 ##### 特别感谢[Eunsolfs](https://github.com/Eunsolfs "Eunsolfs的GitHub")
-##### 这里使用了一言的api接口。有兴趣的小伙伴希望能够赞助他们一下。感谢！因为一直白嫖会让人家破产的。我们就只能每天发固定的东西了！不能发不一样的东西了。[附上链接]("https://hitokoto.cn/")
+##### 这里使用了一言的api接口。有兴趣的小伙伴希望能够赞助他们一下。感谢！因为一直白嫖会让人家破产的。我们就只能每天发固定的东西了！不能发不一样的东西了。[附上链接](https://hitokoto.cn/)
