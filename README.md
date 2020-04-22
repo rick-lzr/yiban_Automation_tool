@@ -23,6 +23,7 @@
 就可以。不过还是需要注意的是，有些包文件是别名的。
 例：`execjs`这个包文件不能pip install execjs的..好像。读者可以试一下。如果不
 行可以baidu：安装execjs。这里就不再给出requirement.txt文件。
+一些有关的包下载现在给出[链接](https://sadtomlzr.github.io/2020/04/21/python%E5%A5%87%E6%80%AA%E7%9A%84%E5%8C%85%E7%9A%84%E5%AE%89%E8%A3%85%E6%95%B4%E7%90%86/)。
 
 
 #### 运行
