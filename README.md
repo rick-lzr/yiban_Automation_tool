@@ -68,4 +68,9 @@ https://gitee.com/lzr9/yiban_Automation_tool/releases/V0.1.1
 ##### 这里使用了一言的api接口。有兴趣的小伙伴希望能够赞助他们一下。感谢！因为一直白嫖会让人家破产的。我们就只能每天发固定的东西了！不能发不一样的东西了。[附上链接](https://hitokoto.cn/)
 ----
 [python代码版更新版详解。](https://sadtomlzr.github.io/2020/04/09/%E6%80%8E%E6%A0%B7%E5%88%B7%E6%98%93%E7%8F%AD%EF%BC%9F/)
+
 [发行版使用手册。](https://sadtomlzr.github.io/2020/04/01/About-how-to-use-yiban-automation-tool/)
+
+[蓝奏云下载地址](https://sadtom.lanzous.com/b015d4v0f)密码:aq6n
+
+
