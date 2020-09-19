@@ -57,8 +57,8 @@ X某某|177******|xxxxx|123456|123456|2
 
 如果你喜欢欢迎`start`也欢迎`issue`
 ### 有疑问请issue。（很重要）
-##### Time :Version 1.0 2020/1/4 提交了requests版本  如有服务需要请联系Q：936332553 良心价.感谢
-要找我不给钱，请先star好叭。。好多人来找我一句谢谢都没，然后还嫌一个班每天6点太慢了。还叫我改一下多写点。我真的是...我也想恰饭的好叭。star也没，谢谢也无，我的天。。，不知道为啥，看到没有star但是有很多人找我。我觉得很气。实在想不通。。后面加好友的一律issue 吧。
+##### Time :Version 1.0 2020/1/4 提交了requests版本  
+有问题请尽量issue。我会尽量解决你的问题的。这样别人看到了得话就会根据issue来个更正自己的错误。谢谢！
 
 > release有exe版本，可直接按照说明使用下载请点击上部release。下载速度太慢可移步到[gitee]("https://gitee.com/lzr9/yiban_Automation_tool/releases/V0.1.1")
 https://gitee.com/lzr9/yiban_Automation_tool/releases/V0.1.1
