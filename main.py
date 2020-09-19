@@ -1,10 +1,10 @@
 import threading
-import EGPA_script_random_num
+import EGPA_script
 import pandas as pd
 
 
 def login(username, password, puid, group_id, is_trans):
-    EGPA_script_random_num.login(username=username, password=password, puid=puid, group_id=group_id,is_trans=is_trans)
+    EGPA_script.login(username=username, password=password, puid=puid, group_id=group_id, is_trans=is_trans)
 
 
 def func():
@@ -19,8 +19,8 @@ def func():
     for i in range(data.__len__()):
         try:
             print(username[i] + " Start")
-            t = threading.Thread(target=EGPA_script_random_num.login,
-                                 args=(name[i], password[i], puid[i], group_id[i], is_trans[i]))
+            t = threading.Thread(target=EGPA_script.login,
+                                 args=(username[i],name[i], password[i], puid[i], group_id[i], is_trans[i]))
             # t.setDaemon(True)
             t.start()
             t.join(150)
