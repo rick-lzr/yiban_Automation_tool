@@ -15,15 +15,19 @@
 ```
 
 #### 环境
-不需要特别的环境搭建就先run  EGPA_script_random_num.py这个文件吧。然后就知道需要哪些包文件了
-提示需要哪些包之后就
+TimeStamp：20201023 8.33 给出了requirements.txt 文件
+> 环境安装
 
-`pip install xxx`
+1、python环境安装
+```
+cd yiban_Automation_tool
+pip install requirements.txt
+```
+2、js环境安装
 
-就可以。不过还是需要注意的是，有些包文件是别名的。
-例：`execjs`这个包文件不能pip install execjs的..好像。读者可以试一下。如果不
-行可以baidu：安装execjs。这里就不再给出requirement.txt文件。
-一些有关的包下载现在给出[链接](https://sadtomlzr.github.io/2020/04/21/python%E5%A5%87%E6%80%AA%E7%9A%84%E5%8C%85%E7%9A%84%E5%AE%89%E8%A3%85%E6%95%B4%E7%90%86/)。
+因为该程序使用了PyExecJS，所以需要安装一个js运行环境。比如node等，都可以。我安装的node。你想换一个也行，百度：PyExecJs安装js环境即可搜索出更多的适用的环境
+
+如果使用requirements.txt下载出现问题：一些有关的包下载现在给出[链接](https://sadtomlzr.github.io/2020/04/21/python%E5%A5%87%E6%80%AA%E7%9A%84%E5%8C%85%E7%9A%84%E5%AE%89%E8%A3%85%E6%95%B4%E7%90%86/)。
 
 
 #### 运行
