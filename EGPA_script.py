@@ -89,6 +89,9 @@ def login(name, username, password, puid, group_id, istrans):
                     print(Name + "--错误码:", login_json['code'], " 原因:", login_json['message'])
                     print("--------------分---割---线--------------")
                     session.close()
+            elif login_json['message'] == '用户名或密码错误':
+                print(Name + "--用户名或密码错误")
+                return
             else:
                 print(Name + "--错误码:", login_json['code'], " 原因:", login_json['message'])
                 print("--------------分---割---线--------------")
