@@ -647,7 +647,8 @@ def Get_All_A_Id():
 
 #  一言
 def YiYan():
-    url = "https://v1.hitokoto.cn/"
+    headers = {'User-Agent':'Mozilla/5.0 3578.98 Safari/537.36'}
+    url = urllib.request.Request("https://v1.hitokoto.cn/", headers=headers)
     try:
         data = urllib.request.urlopen(url)
         jsdate = json.loads(data.read())
