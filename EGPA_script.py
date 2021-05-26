@@ -199,7 +199,7 @@ def start(login_json):
     # 发布动态
     # 微社区添加投票*2
     for iii in range(2):
-        addFeed()
+        # addFeed() # 接口调用没有效果并且得不到 feed id
         add_vote()
     # 批量评论 同情 赞动态
     Comments_sympathy_likes()
