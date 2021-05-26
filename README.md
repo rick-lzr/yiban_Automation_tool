@@ -19,7 +19,6 @@ TimeStamp：20201023 8.33 给出了requirements.txt 文件
 > 环境安装
 
 1、python环境安装
-注：请使用python3
 ```
 cd yiban_Automation_tool
 pip install -r requirements.txt
