@@ -24,7 +24,7 @@ TimeStamp：20201023 8.33 给出了requirements.txt 文件
 1、python环境安装
 ```
 cd yiban_Automation_tool
-pip install requirements.txt
+pip install -r requirements.txt
 ```
 2、js环境安装
 

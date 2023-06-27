@@ -4,3 +4,4 @@ PyExecJS==1.5.1
 beautifulsoup4==4.9.3
 Pillow==9.3.0
 pycryptodome==3.9.8
+xlrd==1.0.0

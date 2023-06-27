@@ -89,6 +89,9 @@ def login(name, username, password, puid, group_id, istrans):
                     print(Name + "--错误码:", login_json['code'], " 原因:", login_json['message'])
                     print("--------------分---割---线--------------")
                     session.close()
+            elif login_json['message'] == '用户名或密码错误':
+                print(Name + "--用户名或密码错误")
+                return
             else:
                 print(Name + "--错误码:", login_json['code'], " 原因:", login_json['message'])
                 print("--------------分---割---线--------------")
@@ -199,7 +202,7 @@ def start(login_json):
     # 发布动态
     # 微社区添加投票*2
     for iii in range(2):
-        addFeed()
+        # addFeed() # 接口调用没有效果并且得不到 feed id
         add_vote()
     # 批量评论 同情 赞动态
     Comments_sympathy_likes()
@@ -647,7 +650,8 @@ def Get_All_A_Id():
 
 #  一言
 def YiYan():
-    url = "https://v1.hitokoto.cn/"
+    headers = {'User-Agent':'Mozilla/5.0 3578.98 Safari/537.36'}
+    url = urllib.request.Request("https://v1.hitokoto.cn/", headers=headers)
     try:
         data = urllib.request.urlopen(url)
         jsdate = json.loads(data.read())
