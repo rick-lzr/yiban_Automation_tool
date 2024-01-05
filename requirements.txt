@@ -3,5 +3,5 @@ requests==2.31.0
 PyExecJS==1.5.1
 beautifulsoup4==4.9.3
 Pillow==10.0.1
-pycryptodome==3.9.8
+pycryptodome==3.19.1
 xlrd==1.0.0
